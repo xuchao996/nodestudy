@@ -26,7 +26,7 @@ const app = connect();
 function Admin (req, res, next) {
 	var authorization = req.headers.authorization;
 	if (!authorization) {
-		res.writeHead(401, {'WWW-Authenticate': 'Basic realm="testrealm@keakon.cn"',
+		res.writeHead(401, {'WWW-Authenticate': 'Basic realm="localhost:3000"',
 		'Content-Type': 'text/html; charset=utf8'});
 		res.end('需要认证\n');
 	} else {
@@ -34,6 +34,7 @@ function Admin (req, res, next) {
 		const parts = authorization.split(' ');
 		// 解密64位
 		var str = new Buffer(parts[1], 'base64').toString()
+		// 获取用户输入的账户密码
 		let name = str.split(':')[0];
 		let password = str.split(':')[1];
 		res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
