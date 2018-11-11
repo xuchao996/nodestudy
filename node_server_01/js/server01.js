@@ -1,4 +1,7 @@
 var http = require("http");
+var Editor = require('../utils/pattern/ICommand.js');
+var editor = new Editor();
+editor.add(list, 0, {a:321})
 http.createServer(function (req, res) {
 	// res.end('<h1>hello world</h1>');
 	var url = 'http://goolge.com'
