@@ -22,8 +22,19 @@ const app = connect();
 // [] 3. \admin 路由
 // [] 4. \others 其他
 
-// 后台管理系统
+// 验证权限
 function Admin (req, res, next) {
+	let url = req.url;
+	if (url === '/') {
+		res.end('try /users')
+	}
+	if (url === '/users') {
+		res.setHeader('Content-Type', 'application/json');
+		res.end(JSON.stringify(["xuchao", "xiaofnag", "gongg"]))
+	}
+}
+// 后台管理系统
+function Restrict (req, res, next) {
 	var authorization = req.headers.authorization;
 	if (!authorization) {
 		res.writeHead(401, {'WWW-Authenticate': 'Basic realm="localhost:3000"',
@@ -37,8 +48,11 @@ function Admin (req, res, next) {
 		// 获取用户输入的账户密码
 		let name = str.split(':')[0];
 		let password = str.split(':')[1];
-		res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'});
-		res.end('认证信息：' + authorization)
+		
+		// 数据库校验
+		if (name === 'xuchao') {
+			next()
+		}
 	}
 }
 
@@ -48,6 +62,7 @@ function Other (req, res) {
 }
 
 app
+.use('/admin', Restrict)
 .use('/admin', Admin)
 .use(Other)
 .listen(3000)
